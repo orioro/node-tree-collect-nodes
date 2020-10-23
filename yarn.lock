@@ -1062,6 +1062,11 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@orioro/cascade@^3.0.0-beta":
+  version "3.0.0-beta"
+  resolved "https://registry.yarnpkg.com/@orioro/cascade/-/cascade-3.0.0-beta.tgz#c84eb9de62349d2da6af28e3977e4b50fb518426"
+  integrity sha512-XlvvVT+4Pj0GcCw2mSNxTvcMPs58jU8s/EeGA+zoFKMClI0YTTlMkbtZLheiQxx1VTkZNTQLas8trF06y5F8MA==
+
 "@rollup/plugin-babel@^5.2.0":
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-babel/-/plugin-babel-5.2.1.tgz#20fc8f8864dc0eaa1c5578408459606808f72924"
@@ -3143,7 +3148,7 @@ lodash.sortby@^4.7.0:
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
   integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
 
-lodash@^4.17.19:
+lodash@^4.17.19, lodash@^4.17.20:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
