@@ -6,11 +6,10 @@
   "module": "dist/index.mjs",
   "scripts": {
     "test": "jest --coverage",
-    "test-watch": "jest --watch",
+    "develop": "jest --watch",
     "build": "rm -rf dist && rollup --config ./rollup/build.config.js && npm run tsc-declaration",
     "prepublish": "npm run build",
     "update-dependencies": "npx npm-check-updates -u",
-    "develop": "rm -rf dist && rollup --config ./rollup/build.config.js --watch",
     "tsc-declaration": "tsc --declaration --emitDeclarationOnly --declarationDir dist"
   },
   "author": "",
