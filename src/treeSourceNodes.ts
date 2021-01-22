@@ -3,6 +3,7 @@ import { cascadeExec, test } from '@orioro/cascade'
 
 export type NodeResolverContext = {
   path: string,
+  resolvers: NodeResolver[],
   [key: string]: any
 }
 
@@ -11,7 +12,24 @@ export type Node = {
   [key: string]: any
 }
 
-export const arrayNodeResolver = (deepFirst = false) => ([
+export type NodeResolverCriteria = (
+  value:any,
+  context:NodeResolverContext
+) => boolean
+
+export type NodeResolverResolver = (
+  value:any,
+  context:NodeResolverContext
+) => Node[]
+
+export type NodeResolver = (
+  [NodeResolverCriteria, NodeResolverResolver] |
+  [NodeResolverResolver]
+)
+
+export const arrayNodeResolver = (
+  deepFirst:boolean = false
+):NodeResolver => ([
   value => Array.isArray(value),
   (value:any[], context:NodeResolverContext):Node[] => (
     value.reduce((acc, item, index) => {
@@ -29,7 +47,9 @@ export const arrayNodeResolver = (deepFirst = false) => ([
   )
 ])
 
-export const objectNodeResolver = (deepFirst = false) => ([
+export const objectNodeResolver = (
+  deepFirst:boolean = false
+):NodeResolver => ([
   value => isPlainObject(value),
   (value:{ [key: string]: any }, context:NodeResolverContext):Node[] => (
     Object.keys(value).reduce((acc, key) => {
@@ -49,7 +69,7 @@ export const objectNodeResolver = (deepFirst = false) => ([
 
 export const defaultNodeResolver = (
   getNodeContextData = context => ({ path: context.path })
-) => ([
+):NodeResolver => ([
   (value:any, context:NodeResolverContext):Node[] => ([{
     ...getNodeContextData(context),
     value
@@ -57,6 +77,6 @@ export const defaultNodeResolver = (
 ])
 
 export const treeSourceNodes = (
-  value,
-  context
+  value:({ [key: string]:any } | any[]),
+  context:NodeResolverContext
 ):Node[] => cascadeExec(test, context.resolvers, value, context)
