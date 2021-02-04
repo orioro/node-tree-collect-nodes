@@ -1,6 +1,8 @@
 .DS_Store
-demo
 rollup
 src
-test
+spec
 .babelrc
+coverage
+.github
+tmp*

@@ -76,6 +76,12 @@ export const defaultNodeResolver = (
   }])
 ])
 
+/**
+ * @function treeSourceNodes
+ * @param {Object | Array} tree
+ * @param {NodeResolverContext} context
+ * @returns {Node[]}
+ */
 export const treeSourceNodes = (
   value:({ [key: string]:any } | any[]),
   context:NodeResolverContext
