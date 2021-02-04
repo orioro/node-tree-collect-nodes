@@ -1,8 +1,8 @@
 # treeSourceNodes
 
 ```
-npm install @npm-org/project-name
-yarn add @npm-org/project-name
+npm install @orioro/tree-source-nodes
+yarn add @orioro/tree-source-nodes
 ```
 
 Helps traversing a nested object tree and generate a flat list of nodes. Allows
