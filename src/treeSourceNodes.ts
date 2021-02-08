@@ -1,8 +1,13 @@
 import { isPlainObject } from 'lodash'
 import { cascadeExec, test } from '@orioro/cascade'
 
+/**
+ * @typedef {Object} NodeResolverContext
+ * @property {string} path
+ * @property {NodeResolver[]} resolvers
+ */
 export type NodeResolverContext = {
-  path: string,
+  path?: string,
   resolvers: NodeResolver[],
   [key: string]: any
 }
@@ -22,6 +27,11 @@ export type NodeResolverResolver = (
   context:NodeResolverContext
 ) => Node[]
 
+/**
+ * `[NodeResolverCriteria, NodeResolverResolver] | [NodeResolverResolver]`
+ * 
+ * @typedef {[NodeResolverCriteria, NodeResolverResolver] | [NodeResolverResolver]} NodeResolver
+ */
 export type NodeResolver = (
   [NodeResolverCriteria, NodeResolverResolver] |
   [NodeResolverResolver]
@@ -63,7 +73,7 @@ export const objectNodeResolver = (
     }, [{
       path: context.path,
       value
-    }])
+    } as Node])
   )
 ])
 
@@ -76,6 +86,10 @@ export const defaultNodeResolver = (
   }])
 ])
 
+const NODE_RESOLVER_CONTEXT_DEFAULTS = {
+  path: ''
+}
+
 /**
  * @function treeSourceNodes
  * @param {Object | Array} tree
@@ -85,4 +99,11 @@ export const defaultNodeResolver = (
 export const treeSourceNodes = (
   value:({ [key: string]:any } | any[]),
   context:NodeResolverContext
-):Node[] => cascadeExec(test, context.resolvers, value, context)
+):Node[] => {
+  context = {
+    ...NODE_RESOLVER_CONTEXT_DEFAULTS,
+    ...context
+  }
+
+  return cascadeExec(test, context.resolvers, value, context)
+}

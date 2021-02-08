@@ -32,8 +32,7 @@ describe('treeSourceNodes(value, resolvers)', () => {
         arrayNodeResolver(),
         objectNodeResolver(),
         defaultNodeResolver()
-      ],
-      path: ''
+      ]
     })
 
     expect(nodes).toEqual([
@@ -112,8 +111,7 @@ describe('treeSourceNodes(value, resolvers)', () => {
           schemaPath: context.schemaPath,
         }))
       ],
-      schemaPath: '',
-      path: ''
+      schemaPath: ''
     })
 
     expect(schemas).toEqual([
