@@ -233,10 +233,23 @@ console.log(flat)
 
 # API Docs
 
+- [`NodeResolverContext`](#noderesolvercontext)
+- [`NodeResolver`](#noderesolver)
 - [`treeSourceNodes(tree, context)`](#treesourcenodestree-context)
+
+##### `NodeResolverContext`
+
+- `path` {string}
+- `resolvers` {[NodeResolver](#noderesolver)[]}
+
+##### `NodeResolver`
+
+`[NodeResolverCriteria, NodeResolverResolver] | [NodeResolverResolver]`
+
+
 
 ##### `treeSourceNodes(tree, context)`
 
 - `tree` {Object | Array}
-- `context` {NodeResolverContext}
+- `context` {[[NodeResolver](#noderesolver)Context](#noderesolvercontext)}
 - Returns: {Node[]}
