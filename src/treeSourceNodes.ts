@@ -28,6 +28,24 @@ export type NodeResolverResolver = (
 ) => Node[]
 
 /**
+ * Utility function to build dot (`.`) notation paths.
+ * Specifically prevents generating paths that start with a `.`.
+ * 
+ * @function pathJoin
+ * @param {string} [base='']
+ * @param {string | number} next
+ * @returns {string} path
+ */
+export const pathJoin = (
+  base:string = '',
+  next:(string | number)
+) => (
+  base === ''
+    ? `${next}`
+    : `${base}.${next}`
+)
+
+/**
  * `[NodeResolverCriteria, NodeResolverResolver] | [NodeResolverResolver]`
  * 
  * @typedef {[NodeResolverCriteria, NodeResolverResolver] | [NodeResolverResolver]} NodeResolver
@@ -47,7 +65,7 @@ export const arrayNodeResolver = (
         ...acc,
         ...treeSourceNodes(item, {
           ...context,
-          path: `${context.path}.${index}`
+          path: pathJoin(context.path, index)
         })
       ]
     }, [{
@@ -67,7 +85,7 @@ export const objectNodeResolver = (
         ...acc,
         ...treeSourceNodes(value[key], {
           ...context,
-          path: `${context.path}.${key}`
+          path: pathJoin(context.path, key)
         })
       ]
     }, [{

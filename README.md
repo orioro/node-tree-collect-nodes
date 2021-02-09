@@ -234,6 +234,7 @@ console.log(flat)
 # API Docs
 
 - [`NodeResolverContext`](#noderesolvercontext)
+- [`pathJoin(base, next)`](#pathjoinbase-next)
 - [`NodeResolver`](#noderesolver)
 - [`treeSourceNodes(tree, context)`](#treesourcenodestree-context)
 
@@ -241,6 +242,15 @@ console.log(flat)
 
 - `path` {string}
 - `resolvers` {[NodeResolver](#noderesolver)[]}
+
+##### `pathJoin(base, next)`
+
+Utility function to build dot (`.`) notation paths.
+Specifically prevents generating paths that start with a `.`.
+
+- `base` {string}
+- `next` {string | number}
+- Returns: `path` {string} 
 
 ##### `NodeResolver`
 
