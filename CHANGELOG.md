@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/orioro/node-tree-source-nodes/compare/v1.1.0...v1.2.0) (2021-02-09)
+
+
+### Features
+
+* remove leading dot from all node paths ([71e74bf](https://github.com/orioro/node-tree-source-nodes/commit/71e74bfe591f33f5a92b4a974d9f3bb6d9c01261))
+
 # [1.1.0](https://github.com/orioro/node-tree-source-nodes/compare/v1.0.0...v1.1.0) (2021-02-08)
 
 
