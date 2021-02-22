@@ -1,8 +1,8 @@
 # treeSourceNodes
 
 ```
-npm install @orioro/tree-source-nodes
-yarn add @orioro/tree-source-nodes
+npm install @orioro/tree-collect-nodes
+yarn add @orioro/tree-collect-nodes
 ```
 
 Helps traversing a nested object tree and generate a flat list of nodes. Allows
@@ -28,7 +28,7 @@ import {
   objectNodeResolver,
   defaultNodeResolver,
   treeSourceNodes
-} from '@orioro/tree-source-nodes'
+} from '@orioro/tree-collect-nodes'
 
 const tree = {
   key0: 'value0',
@@ -233,15 +233,15 @@ console.log(flat)
 
 # API Docs
 
-- [`NodeResolverContext`](#noderesolvercontext)
+- [`NodeCollectorContext`](#nodecollectorcontext)
 - [`pathJoin(base, next)`](#pathjoinbase-next)
-- [`NodeResolver`](#noderesolver)
-- [`treeSourceNodes(tree, context)`](#treesourcenodestree-context)
+- [`NodeCollector`](#nodecollector)
+- [`treeCollectNodes(tree, context)`](#treecollectnodestree-context)
 
-##### `NodeResolverContext`
+##### `NodeCollectorContext`
 
 - `path` {string}
-- `resolvers` {[NodeResolver](#noderesolver)[]}
+- `resolvers` {[NodeCollector](#nodecollector)[]}
 
 ##### `pathJoin(base, next)`
 
@@ -252,14 +252,14 @@ Specifically prevents generating paths that start with a `.`.
 - `next` {string | number}
 - Returns: `path` {string} 
 
-##### `NodeResolver`
+##### `NodeCollector`
 
-`[NodeResolverCriteria, NodeResolverResolver] | [NodeResolverResolver]`
+`[NodeCollectorCriteria, NodeCollectorResolver] | [NodeCollectorResolver]`
 
 
 
-##### `treeSourceNodes(tree, context)`
+##### `treeCollectNodes(tree, context)`
 
 - `tree` {Object | Array}
-- `context` {[[NodeResolver](#noderesolver)Context](#noderesolvercontext)}
+- `context` {[[NodeCollector](#nodecollector)Context](#nodecollectorcontext)}
 - Returns: {Node[]}

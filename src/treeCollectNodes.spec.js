@@ -1,14 +1,14 @@
 import {
-  arrayNodeResolver,
-  objectNodeResolver,
-  defaultNodeResolver,
-  treeSourceNodes,
+  arrayNodeCollector,
+  objectNodeCollector,
+  defaultNodeCollector,
+  treeCollectNodes,
   pathJoin
-} from './treeSourceNodes'
+} from './treeCollectNodes'
 
 import { isPlainObject } from 'lodash'
 
-describe('treeSourceNodes(value, resolvers)', () => {
+describe('treeCollectNodes(value, resolvers)', () => {
 	test('', () => {
     const value = {
       key0: 'value0',
@@ -28,11 +28,11 @@ describe('treeSourceNodes(value, resolvers)', () => {
       }
     }
 
-    const nodes = treeSourceNodes(value, {
+    const nodes = treeCollectNodes(value, {
       resolvers: [
-        arrayNodeResolver(),
-        objectNodeResolver(),
-        defaultNodeResolver()
+        arrayNodeCollector(),
+        objectNodeCollector(),
+        defaultNodeCollector()
       ]
     })
 
@@ -91,7 +91,7 @@ describe('treeSourceNodes(value, resolvers)', () => {
 
         return Object.keys(value.properties).reduce((acc, key) => ([
           ...acc,
-          ...treeSourceNodes(value.properties[key], {
+          ...treeCollectNodes(value.properties[key], {
             ...context,
             schemaPath: pathJoin(schemaPath, `properties.${key}`),
             path: pathJoin(context.path, key)
@@ -104,10 +104,10 @@ describe('treeSourceNodes(value, resolvers)', () => {
       }
     ]
 
-    const schemas = treeSourceNodes(schema, {
+    const schemas = treeCollectNodes(schema, {
       resolvers: [
         MAP_TYPE_RESOLVER,
-        defaultNodeResolver(context => ({
+        defaultNodeCollector(context => ({
           path: context.path,
           schemaPath: context.schemaPath,
         }))

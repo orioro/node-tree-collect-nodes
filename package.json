@@ -1,5 +1,5 @@
 {
-  "name": "@orioro/tree-source-nodes",
+  "name": "@orioro/tree-collect-nodes",
   "version": "0.0.0-semantic-release",
   "description": "",
   "main": "dist/index.js",
@@ -27,8 +27,6 @@
     "@rollup/plugin-babel": "^5.2.0",
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
-    "@semantic-release/changelog": "^5.0.1",
-    "@semantic-release/git": "^9.0.0",
     "babel-jest": "^26.3.0",
     "commitizen": "^4.2.3",
     "cz-conventional-changelog": "^3.3.0",
@@ -50,8 +48,6 @@
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
-      "@semantic-release/changelog",
-      "@semantic-release/git",
       "@semantic-release/npm",
       "@semantic-release/github"
     ]

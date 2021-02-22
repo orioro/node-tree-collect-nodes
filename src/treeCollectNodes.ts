@@ -2,13 +2,13 @@ import { isPlainObject } from 'lodash'
 import { cascadeExec, test } from '@orioro/cascade'
 
 /**
- * @typedef {Object} NodeResolverContext
+ * @typedef {Object} NodeCollectorContext
  * @property {string} path
- * @property {NodeResolver[]} resolvers
+ * @property {NodeCollector[]} resolvers
  */
-export type NodeResolverContext = {
+export type NodeCollectorContext = {
   path?: string,
-  resolvers: NodeResolver[],
+  resolvers: NodeCollector[],
   [key: string]: any
 }
 
@@ -17,14 +17,14 @@ export type Node = {
   [key: string]: any
 }
 
-export type NodeResolverCriteria = (
+export type NodeCollectorCriteria = (
   value:any,
-  context:NodeResolverContext
+  context:NodeCollectorContext
 ) => boolean
 
-export type NodeResolverResolver = (
+export type NodeCollectorResolver = (
   value:any,
-  context:NodeResolverContext
+  context:NodeCollectorContext
 ) => Node[]
 
 /**
@@ -46,24 +46,24 @@ export const pathJoin = (
 )
 
 /**
- * `[NodeResolverCriteria, NodeResolverResolver] | [NodeResolverResolver]`
+ * `[NodeCollectorCriteria, NodeCollectorResolver] | [NodeCollectorResolver]`
  * 
- * @typedef {[NodeResolverCriteria, NodeResolverResolver] | [NodeResolverResolver]} NodeResolver
+ * @typedef {[NodeCollectorCriteria, NodeCollectorResolver] | [NodeCollectorResolver]} NodeCollector
  */
-export type NodeResolver = (
-  [NodeResolverCriteria, NodeResolverResolver] |
-  [NodeResolverResolver]
+export type NodeCollector = (
+  [NodeCollectorCriteria, NodeCollectorResolver] |
+  [NodeCollectorResolver]
 )
 
-export const arrayNodeResolver = (
+export const arrayNodeCollector = (
   deepFirst:boolean = false
-):NodeResolver => ([
+):NodeCollector => ([
   value => Array.isArray(value),
-  (value:any[], context:NodeResolverContext):Node[] => (
+  (value:any[], context:NodeCollectorContext):Node[] => (
     value.reduce((acc, item, index) => {
       return [
         ...acc,
-        ...treeSourceNodes(item, {
+        ...treeCollectNodes(item, {
           ...context,
           path: pathJoin(context.path, index)
         })
@@ -75,15 +75,15 @@ export const arrayNodeResolver = (
   )
 ])
 
-export const objectNodeResolver = (
+export const objectNodeCollector = (
   deepFirst:boolean = false
-):NodeResolver => ([
+):NodeCollector => ([
   value => isPlainObject(value),
-  (value:{ [key: string]: any }, context:NodeResolverContext):Node[] => (
+  (value:{ [key: string]: any }, context:NodeCollectorContext):Node[] => (
     Object.keys(value).reduce((acc, key) => {
       return [
         ...acc,
-        ...treeSourceNodes(value[key], {
+        ...treeCollectNodes(value[key], {
           ...context,
           path: pathJoin(context.path, key)
         })
@@ -95,10 +95,10 @@ export const objectNodeResolver = (
   )
 ])
 
-export const defaultNodeResolver = (
+export const defaultNodeCollector = (
   getNodeContextData = context => ({ path: context.path })
-):NodeResolver => ([
-  (value:any, context:NodeResolverContext):Node[] => ([{
+):NodeCollector => ([
+  (value:any, context:NodeCollectorContext):Node[] => ([{
     ...getNodeContextData(context),
     value
   }])
@@ -109,14 +109,14 @@ const NODE_RESOLVER_CONTEXT_DEFAULTS = {
 }
 
 /**
- * @function treeSourceNodes
+ * @function treeCollectNodes
  * @param {Object | Array} tree
- * @param {NodeResolverContext} context
+ * @param {NodeCollectorContext} context
  * @returns {Node[]}
  */
-export const treeSourceNodes = (
+export const treeCollectNodes = (
   value:({ [key: string]:any } | any[]),
-  context:NodeResolverContext
+  context:NodeCollectorContext
 ):Node[] => {
   context = {
     ...NODE_RESOLVER_CONTEXT_DEFAULTS,
