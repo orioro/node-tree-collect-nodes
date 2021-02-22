@@ -3,13 +3,23 @@ import {
   objectNodeCollector,
   defaultNodeCollector,
   treeCollectNodes,
-  pathJoin
+  pathJoin,
 } from './treeCollectNodes'
 
 import { isPlainObject } from 'lodash'
 
-describe('treeCollectNodes(value, resolvers)', () => {
-	test('', () => {
+describe('pathJoin(base, next)', () => {
+  test('basic', () => {
+    expect(pathJoin('base', 'next')).toEqual('base.next')
+  })
+
+  test('undefined base', () => {
+    expect(pathJoin(undefined, 'next')).toEqual('next')
+  })
+})
+
+describe('treeCollectNodes(value, context)', () => {
+  test('basic', () => {
     const value = {
       key0: 'value0',
       key1: 'value1',
@@ -17,23 +27,23 @@ describe('treeCollectNodes(value, resolvers)', () => {
         {
           key20: 'value20',
           key21: 'value21',
-          key22: 'value22'
-        }
+          key22: 'value22',
+        },
       ],
       key3: {
         key30: {
           key300: 'value300',
-          key301: ['value3010', 'value3011']
-        }
-      }
+          key301: ['value3010', 'value3011'],
+        },
+      },
     }
 
     const nodes = treeCollectNodes(value, {
-      resolvers: [
+      collectors: [
         arrayNodeCollector(),
         objectNodeCollector(),
-        defaultNodeCollector()
-      ]
+        defaultNodeCollector(),
+      ],
     })
 
     expect(nodes).toEqual([
@@ -52,14 +62,14 @@ describe('treeCollectNodes(value, resolvers)', () => {
       { path: 'key3.key30.key301.0', value: value.key3.key30.key301[0] },
       { path: 'key3.key30.key301.1', value: value.key3.key30.key301[1] },
     ])
-	})
+  })
 
   test('custom structure', () => {
     const schema = {
       type: 'map',
       properties: {
         key0: {
-          type: 'string'
+          type: 'string',
         },
         key1: {
           type: 'map',
@@ -68,88 +78,91 @@ describe('treeCollectNodes(value, resolvers)', () => {
               type: 'map',
               properties: {
                 key100: { type: 'string' },
-                key101: { type: 'number' }
-              }
-            }
-          }
+                key101: { type: 'number' },
+              },
+            },
+          },
         },
         key2: {
-          type: 'number'
-        }
-      }
+          type: 'number',
+        },
+      },
     }
 
     const MAP_TYPE_RESOLVER = [
-      (value) => (
+      (value) =>
         isPlainObject(value) &&
         value.type === 'map' &&
-        isPlainObject(value.properties)
-      ),
+        isPlainObject(value.properties),
       (value, context) => {
-
         const schemaPath = context.schemaPath || ''
 
-        return Object.keys(value.properties).reduce((acc, key) => ([
-          ...acc,
-          ...treeCollectNodes(value.properties[key], {
-            ...context,
-            schemaPath: pathJoin(schemaPath, `properties.${key}`),
-            path: pathJoin(context.path, key)
-          })
-        ]), [{
-          value,
-          schemaPath,
-          path: context.path
-        }])
-      }
+        return Object.keys(value.properties).reduce(
+          (acc, key) => [
+            ...acc,
+            ...treeCollectNodes(value.properties[key], {
+              ...context,
+              schemaPath: pathJoin(schemaPath, `properties.${key}`),
+              path: pathJoin(context.path, key),
+            }),
+          ],
+          [
+            {
+              value,
+              schemaPath,
+              path: context.path,
+            },
+          ]
+        )
+      },
     ]
 
     const schemas = treeCollectNodes(schema, {
-      resolvers: [
+      collectors: [
         MAP_TYPE_RESOLVER,
-        defaultNodeCollector(context => ({
+        defaultNodeCollector((context) => ({
           path: context.path,
           schemaPath: context.schemaPath,
-        }))
+        })),
       ],
-      schemaPath: ''
+      schemaPath: '',
     })
 
     expect(schemas).toEqual([
       {
         path: '',
         schemaPath: '',
-        value: schema
+        value: schema,
       },
       {
         path: 'key0',
         schemaPath: 'properties.key0',
-        value: schema.properties.key0
+        value: schema.properties.key0,
       },
       {
         path: 'key1',
         schemaPath: 'properties.key1',
-        value: schema.properties.key1
+        value: schema.properties.key1,
       },
       {
         path: 'key1.key10',
         schemaPath: 'properties.key1.properties.key10',
-        value: schema.properties.key1.properties.key10
+        value: schema.properties.key1.properties.key10,
       },
       {
         path: 'key1.key10.key100',
         schemaPath: 'properties.key1.properties.key10.properties.key100',
-        value: schema.properties.key1.properties.key10.properties.key100
+        value: schema.properties.key1.properties.key10.properties.key100,
       },
       {
         path: 'key1.key10.key101',
         schemaPath: 'properties.key1.properties.key10.properties.key101',
-        value: schema.properties.key1.properties.key10.properties.key101
+        value: schema.properties.key1.properties.key10.properties.key101,
       },
       {
         path: 'key2',
         schemaPath: 'properties.key2',
-        value: schema.properties.key2
+        value: schema.properties.key2,
       },
     ])
   })
