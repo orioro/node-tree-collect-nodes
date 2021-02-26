@@ -1,8 +1,0 @@
-.DS_Store
-rollup
-src
-spec
-.babelrc
-coverage
-.github
-tmp*
